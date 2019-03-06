@@ -3,6 +3,7 @@ import users from '../models/users';
 
 const router = express.Router();
 
+/*
 const getAllUsers = () => new Promise ((response, reject) => {
     
     users.find({}, (err, users) => {
@@ -13,6 +14,9 @@ const getAllUsers = () => new Promise ((response, reject) => {
         response(users);
     });
 });
+*/
+
+const getAllUsers = async() => users.find({}, (err, users) => err ? err : users);
 
 router.get('/', (request, resolve) => {
     getAllUsers().then(users => resolve.json(users));

@@ -5,7 +5,7 @@ import logSymbols from 'log-symbols';
 
 import { router as usersRouter } from './routes/users';
 
-const PORT = 3701;
+const PORT = 3801;
 const MONGO_DB_URL = 'mongodb://localhost:27017/coffeeDB';
 
 const app = express();
