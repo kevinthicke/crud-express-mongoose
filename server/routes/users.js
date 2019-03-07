@@ -1,25 +1,41 @@
 import express from 'express';
-import users from '../models/users';
+import { getAllUsers } from '../controllers/users';
+import User from '../models/users';
 
 const router = express.Router();
 
-/*
-const getAllUsers = () => new Promise ((response, reject) => {
+router.get('/', (request, resolve) => {
+
+    getAllUsers()
+    .then(users => resolve.status(200).json(users))
+    .catch(err => resolve.status(400).json(err))
+
+});
+
+router.post('/', (request, resolve) => {
     
-    users.find({}, (err, users) => {
+    const { name, email, password, role } = request.body;
+
+    const user = new User({
+        name,
+        email,
+        password,
+        role
+    });
+
+    user.save((err, response) => {
         if(err) {
-            return reject(err);
+            return resolve.status(400).json({
+                ok: false,
+                err
+            });
         }
 
-        response(users);
-    });
-});
-*/
-
-const getAllUsers = async() => users.find({}, (err, users) => err ? err : users);
-
-router.get('/', (request, resolve) => {
-    getAllUsers().then(users => resolve.json(users));
-});
+        resolve.json({
+            ok: true,
+            user: response
+        })
+    })
+})
 
 export { router };
