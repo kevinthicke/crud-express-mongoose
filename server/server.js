@@ -5,7 +5,6 @@ import colors from 'colors/safe';
 import logSymbols from 'log-symbols';
 
 import { router as usersRouter } from './routes/users';
-import createUsers from './aux/insertUsersDB';
 import insertUsersDB from './aux/insertUsersDB';
 
 const PORT = 9901;
