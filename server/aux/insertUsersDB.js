@@ -1,7 +1,6 @@
 import MongoClient from 'mongodb';
 
 import { names }  from './names.js';
-import Users from './../models/users';
 import { handleResponse, handleError } from '../utils/handlers.js';
 
 const createRandomPassword = () => {
@@ -33,7 +32,7 @@ const createUsers = () => {
 
 }
 
-export default function insertUsersDB() {
+export default function insertRandomUsersDB() {
     
     return new Promise((resolve, reject) => {
         
@@ -49,7 +48,7 @@ export default function insertUsersDB() {
                 const usersCollection = db.collection('users');
 
                 const aUsers = createUsers();
-                
+
                 usersCollection.insertMany(aUsers)
                 .then(response => resolve(handleResponse('50 users have been inserted into coffeeDB!')))
                 .catch(err => reject(handleError(err)))

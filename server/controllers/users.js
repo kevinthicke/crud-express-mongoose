@@ -1,9 +1,11 @@
+import bcrypt from 'bcrypt';
+
 import User from "../models/users";
 import { handleError, handleResponse } from "../utils/handlers";
 
 
-const getAllUsers = () => new Promise((resolve, reject) => {
-    
+const getAllUsers = (from = 0, to = 15) => new Promise((resolve, reject) => {
+
     User.find({}, (err, users) => {
         return (
             err 
@@ -11,6 +13,8 @@ const getAllUsers = () => new Promise((resolve, reject) => {
             : resolve(handleResponse(users))
         )
     })
+    .skip(Number(from))
+    .limit(Number(to));
 
 })
 
@@ -21,7 +25,7 @@ const insertUser = newUser => new Promise((resolve, reject) => {
     const user = new User({
         name,
         email,
-        password,
+        password: bcrypt.hashSync(password, 10),
         role
     });
 

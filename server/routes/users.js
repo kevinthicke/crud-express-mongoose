@@ -5,7 +5,9 @@ const router = express.Router();
 
 router.get('/', (request, resolve) => {
 
-    getAllUsers()
+    const { from, to } = request.query;
+    
+    getAllUsers(from, to)
     .then(response => resolve.status(200).json(response))
     .catch(err => resolve.status(400).json(err));
 

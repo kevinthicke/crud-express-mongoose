@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 
 const userSchema = new Schema({
     name: {
@@ -35,5 +36,15 @@ const userSchema = new Schema({
     }
 
 });
+
+userSchema.plugin(uniqueValidator, { message: '{PATH} should be unique' });
+
+userSchema.methods.toJSON = function () {
+    
+    const userObj = this.toObject();
+    delete userObj.password;
+
+    return userObj
+}
 
 export default model('User', userSchema )
