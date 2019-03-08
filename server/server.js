@@ -5,6 +5,8 @@ import colors from 'colors/safe';
 import logSymbols from 'log-symbols';
 
 import { router as usersRouter } from './routes/users';
+import createUsers from './aux/insertUsersDB';
+import insertUsersDB from './aux/insertUsersDB';
 
 const PORT = 9901;
 const MONGO_DB_URL = 'mongodb://localhost:27017/coffeeDB';
@@ -22,6 +24,14 @@ mongoose.connect(MONGO_DB_URL, (err, response) => {
 
     const msg = colors.bold.green(' DB connection established successfully');
     console.log(logSymbols.success, msg);
+
+});
+
+app.get('/gen-users/', (request, resolve) => {
+
+    insertUsersDB()
+    .then(response => resolve.status(200).json(response))
+    .catch(err => resolve.status(400).json(err));
 
 });
 

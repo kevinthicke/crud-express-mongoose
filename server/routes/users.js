@@ -1,41 +1,35 @@
 import express from 'express';
-import { getAllUsers } from '../controllers/users';
-import User from '../models/users';
+import { getAllUsers, insertUser } from '../controllers/users';
 
 const router = express.Router();
 
 router.get('/', (request, resolve) => {
 
     getAllUsers()
-    .then(users => resolve.status(200).json(users))
-    .catch(err => resolve.status(400).json(err))
+    .then(response => resolve.status(200).json(response))
+    .catch(err => resolve.status(400).json(err));
 
 });
 
 router.post('/', (request, resolve) => {
+
+    const user = request.body;
+
+    insertUser(user)
+    .then(response => resolve.status(200).json(response))
+    .catch(err => resolve.status(400).json(err));
+
+});
+
+router.put('/:id', (request, resolve) => {
     
-    const { name, email, password, role } = request.body;
+    const { id } = request.params;
+    const updatedUser = request.body;
 
-    const user = new User({
-        name,
-        email,
-        password,
-        role
-    });
+    updatedUser(id, updatedUser)
+    .then(response => resolve.status(200).json(response))
+    .catch(err => resolve.status(400).json(err));
 
-    user.save((err, response) => {
-        if(err) {
-            return resolve.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        resolve.json({
-            ok: true,
-            user: response
-        })
-    })
 })
 
 export { router };
