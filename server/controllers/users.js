@@ -6,12 +6,20 @@ import { handleError, handleResponse } from "../utils/handlers";
 
 const getAllUsers = (from = 0, to = 15) => new Promise((resolve, reject) => {
 
-    User.find({}, (err, users) => {
-        return (
-            err 
-            ? reject(handleError(err)) 
-            : resolve(handleResponse(users))
-        )
+    User.find({ state: true }, (err, users) => {
+        
+        if(err) return reject(handleError(err))
+        
+        User.count({}, (err, count) => {
+
+            return (
+                err 
+                ? reject(handleError(err)) 
+                : resolve(handleResponse({ users, count }))
+            )
+
+        })
+
     })
     .skip(Number(from))
     .limit(Number(to));
@@ -50,8 +58,23 @@ const updateUser = (id, updatedUser) => new Promise((resolve, reject) => {
 
 })
 
+const deleteUser = id => new Promise((resolve, reject) => {
+    
+    User.findByIdAndUpdate(id, { state: false }, { new: true }, (err, user) => {
+        return (
+            err 
+            ? reject(handleError(err)) 
+            : resolve(handleResponse(user))
+        )
+    })
+
+})
+
+
+
 export {
     getAllUsers,
     insertUser,
-    updateUser
+    updateUser,
+    deleteUser
 }
